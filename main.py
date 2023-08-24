@@ -45,7 +45,7 @@ def get_parenthesis(proposition: str):
 
 def main():
     # proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ')
-    proposition = 'p=>q'
+    proposition = '(pv(q<=>(r^s)))=>(~r=>s)'
     letters = list(set([x for x in proposition if x.isalpha() and x != 'v']))
     letters.sort()
 
@@ -65,21 +65,29 @@ def main():
         per_letter_truth = {letter: 'T' if truth_value == 'T' else 'F' for letter, truth_value in
                             zip(letters, truth_table_row)}
 
-        for x in expressions:
+        # expressions_truth_list = []
+
+        for j, x in enumerate(expressions):
             result = 'T'
 
-            for key, value in per_letter_truth.items():
-                x = x.replace(key, '1' if value == 'T' else '0')
+            for k, l in zip(truth_table_head[::-1][len(expressions) - len(truth_table_row) + len(letters):],
+                            truth_table_row[::-1]):
+                if k in x:
+                    x = x.replace(k, '1' if l == 'T' else '0')
 
-            if '=>' in x and '<=>' not in x:
+            x = x.replace('<=>', '==').replace('+', '!=')
+            x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
+
+            if '=>' in x:
                 x_split = x.split('=>')
 
-                if eval(x_split[0]) and not eval(x_split[1]):
+                eval1 = eval(x_split[0])
+                eval2 = eval(x_split[1])
+
+                if (eval1 or eval1 != 0) and (not eval2 or eval2 == 0):
                     result = 'F'
 
             else:
-                x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
-                x = x.replace('<=>', '==').replace('+', '!=')
                 eval_res = eval(x)
 
                 result = 'T' if eval_res != 0 else 'F'
