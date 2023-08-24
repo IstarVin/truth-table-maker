@@ -44,8 +44,8 @@ def get_parenthesis(proposition: str):
 
 
 def main():
-    # proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ')
-    proposition = '(pv(q<=>(r^s)))=>(~r=>s)'
+    proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ')
+    # proposition = '(pv(q<=>(r^s)))=>(~r=>s)'
     letters = list(set([x for x in proposition if x.isalpha() and x != 'v']))
     letters.sort()
 
@@ -61,11 +61,6 @@ def main():
 
     for i in letter_truth_values(len(letters)):
         truth_table_row = [x for x in i]
-
-        per_letter_truth = {letter: 'T' if truth_value == 'T' else 'F' for letter, truth_value in
-                            zip(letters, truth_table_row)}
-
-        # expressions_truth_list = []
 
         for j, x in enumerate(expressions):
             result = 'T'
