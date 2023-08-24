@@ -1,4 +1,3 @@
-import copy
 from itertools import product
 
 from prettytable import PrettyTable
@@ -45,8 +44,8 @@ def get_parenthesis(proposition: str):
 
 
 def main():
-    # proposition = input('Enter a proposition (ex. "(pv(q^s))^(~rvs)"): ')
-    proposition = '(~pv(q^s))^~(~rv(sv~p))'
+    # proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ')
+    proposition = 'p=>q'
     letters = list(set([x for x in proposition if x.isalpha() and x != 'v']))
     letters.sort()
 
@@ -66,27 +65,24 @@ def main():
         per_letter_truth = {letter: 'T' if truth_value == 'T' else 'F' for letter, truth_value in
                             zip(letters, truth_table_row)}
 
-        # translate_table = str.maketrans(''.join(letters), ''.join(['1' if char == 'T' else '0' for char in i]))
-
         for x in expressions:
-            # print(x.translate(translate_table))
-
-            expression = copy.deepcopy(x)
-            #
-            # for j, char in enumerate(x):
-            #     if char in letters and j != len(x) - 1 and (not x[j + 1].isalpha() or x[j + 1] == 'v'):
-            #         expression = expression[:j] + per_letter_truth[char] + expression[j + 1:]
+            result = 'T'
 
             for key, value in per_letter_truth.items():
                 x = x.replace(key, '1' if value == 'T' else '0')
 
-            x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
+            if '=>' in x and '<=>' not in x:
+                x_split = x.split('=>')
 
-            eval_res = eval(x)
+                if eval(x_split[0]) and not eval(x_split[1]):
+                    result = 'F'
 
-            # print(eval_res, x)
+            else:
+                x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
+                x = x.replace('<=>', '==').replace('+', '!=')
+                eval_res = eval(x)
 
-            result = 'T' if eval_res != 0 else 'F'
+                result = 'T' if eval_res != 0 else 'F'
 
             truth_table_row.append(result)
 
