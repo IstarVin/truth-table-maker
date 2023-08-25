@@ -4,7 +4,7 @@ from prettytable import PrettyTable
 
 def get_negation(proposition: str):
     return list(set([f"~{char}" for i, char in enumerate(proposition)
-                     if char.isalpha() and i != 0 and proposition[i - 1] == '~']))
+                     if char.isalpha() and i != 0 and proposition[i - 1] in ['~', '∼']]))
 
 
 def get_parenthesis(proposition: str):
@@ -37,7 +37,8 @@ def get_parenthesis(proposition: str):
 
 
 def main():
-    proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ')
+    proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ').replace(' ', '')
+    print(proposition)
     # proposition = '(pv(q<=>(r^s)))=>(~r=>s)'
     letters = list(dict.fromkeys([x for x in proposition if x.isalpha() and x != 'v']))
     letters.sort()
@@ -63,11 +64,12 @@ def main():
                 if k in x:
                     x = x.replace(k, '1' if l == 'T' else '0')
 
-            x = x.replace('<=>', '==').replace('+', '!=')
+            x = x.replace('<=>', '==').replace('+', '!=').replace('⇐⇒', '==')
             x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
+            x = x.replace('∨', ' or ').replace('∧', ' and ').replace('∼', 'not ')
 
-            if '=>' in x:
-                x_split = x.split('=>')
+            if '=>' in x or '=⇒' in x:
+                x_split = x.split('=>') if '=>' in x else x.split('=⇒')
 
                 eval1 = eval(x_split[0])
                 eval2 = eval(x_split[1])
