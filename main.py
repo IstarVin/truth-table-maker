@@ -1,12 +1,5 @@
 from itertools import product
-
 from prettytable import PrettyTable
-
-
-def letter_truth_values(num):
-    values_combinations = product(['T', 'F'], repeat=num)
-
-    return [x for x in values_combinations]
 
 
 def get_negation(proposition: str):
@@ -46,7 +39,7 @@ def get_parenthesis(proposition: str):
 def main():
     proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ')
     # proposition = '(pv(q<=>(r^s)))=>(~r=>s)'
-    letters = list(set([x for x in proposition if x.isalpha() and x != 'v']))
+    letters = list(dict.fromkeys([x for x in proposition if x.isalpha() and x != 'v']))
     letters.sort()
 
     truth_table_head = []
@@ -59,7 +52,7 @@ def main():
 
     expressions = truth_table_head[len(letters):]
 
-    for i in letter_truth_values(len(letters)):
+    for i in product(['T', 'F'], repeat=len(letters)):
         truth_table_row = [x for x in i]
 
         for j, x in enumerate(expressions):
