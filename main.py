@@ -38,7 +38,6 @@ def get_parenthesis(proposition: str):
 
 def main():
     proposition = input('Enter a proposition (ex. "(pv(q<=>s))^(~r+s)"): ').replace(' ', '')
-    print(proposition)
     # proposition = '(pv(q<=>(r^s)))=>(~r=>s)'
     letters = list(dict.fromkeys([x for x in proposition if x.isalpha() and x != 'v']))
     letters.sort()
@@ -49,7 +48,7 @@ def main():
     truth_table_head.extend(get_parenthesis(proposition))
     truth_table_head.append(proposition)
 
-    truth_table = PrettyTable(truth_table_head)
+    truth_table = PrettyTable(truth_table_head, title='Truth Table of ' + proposition)
 
     expressions = truth_table_head[len(letters):]
 
@@ -66,7 +65,7 @@ def main():
 
             x = x.replace('<=>', '==').replace('+', '!=').replace('⇐⇒', '==')
             x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
-            x = x.replace('∨', ' or ').replace('∧', ' and ').replace('∼', 'not ')
+            x = x.replace('∼', 'not ').replace('∨', ' or ').replace('∧', ' and ')
 
             if '=>' in x or '=⇒' in x:
                 x_split = x.split('=>') if '=>' in x else x.split('=⇒')
