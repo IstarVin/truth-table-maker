@@ -58,10 +58,15 @@ def main():
         for j, x in enumerate(expressions):
             result = 'T'
 
-            for k, l in zip(truth_table_head[::-1][len(expressions) - len(truth_table_row) + len(letters):],
-                            truth_table_row[::-1]):
-                if k in x:
-                    x = x.replace(k, '1' if l == 'T' else '0')
+            # for k, l in zip(truth_table_head[::-1][len(expressions) - len(truth_table_row) + len(letters):],
+            #                 truth_table_row[::-1]):
+            #     # substr_index = x.find(k)
+            #     # if substr_index != -1 and substr_index != and x[substr_index-1]
+            #     if k in x:
+            #         x = x.replace(k, '1' if l == 'T' else '0')
+            for k, l in zip(truth_table_head[:len(truth_table_head) - 1 - len(letters)],
+                            truth_table_row[:len(truth_table_head) - 1 - len(letters)]):
+                x = x.replace(k, '1' if l == 'T' else '0')
 
             x = x.replace('<=>', '==').replace('+', '!=').replace('⇐⇒', '==')
             x = x.replace("~", "not ").replace("v", " or ").replace("^", " and ")
